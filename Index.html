@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Información de libros</title>
+  <link rel="stylesheet" type="text/css" href="Style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Explora el Mundo de las Palabras: Encuentra información sobre tu libro favorito</h1>
+    <div>
+      <label for="searchInput">Título o Palabras Clave:</label>
+      <div class="input-container">
+        <input required="" id="searchInput" type="text"> 
+        <label class="label" for="searchInput">Enter Text</label> 
+        <div class="underline"></div>
+        <div class="sideline"></div>
+        <div class="upperline"></div>
+        <div class="line"></div>
+      </div>
+      <button onclick="searchBooks()">Buscar</button> 
+      <div class="night">
+        <div class="night">
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+          <div class="shooting_star"></div>
+        </div>
+      </div>
+    </div>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    function handleResponse(response) {
+      var resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = ""; 
+
+      if (response.items && response.items.length > 0) {
+        for (var i = 0; i < response.items.length; i++) {
+          var item = response.items[i];
+          var title = item.volumeInfo.title;
+          var authors = item.volumeInfo.authors ? item.volumeInfo.authors.join(", ") : "Desconocido";
+          var description = item.volumeInfo.description || "Sin descripción disponible";
+
+          var bookDiv = document.createElement("div");
+          bookDiv.classList.add("book");
+
+          var titleElement = document.createElement("h2");
+          titleElement.textContent = title;
+
+          var authorsElement = document.createElement("p");
+          authorsElement.textContent = "Autor(es): " + authors;
+
+          var descriptionElement = document.createElement("p");
+          descriptionElement.textContent = "Descripción: " + description;
+
+          bookDiv.appendChild(titleElement);
+          bookDiv.appendChild(authorsElement);
+          bookDiv.appendChild(descriptionElement);
+
+         
+          resultsDiv.appendChild(bookDiv);
+        }
+      } else {
+        resultsDiv.textContent = "No se encontraron resultados.";
+      }
+    }
+
+    function searchBooks() {
+      var searchInput = document.getElementById("searchInput").value;
+      var apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchInput)}&maxResults=10`;
+
+      
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => handleResponse(data))
+        .catch(error => console.error("Error:", error));
+    }
+  </script>
+
+  <style>
+    
+    .book {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</body>
+</html>
